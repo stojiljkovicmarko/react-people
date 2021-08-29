@@ -11,7 +11,7 @@ const Header = ({ isGridView, changeView, refreshUserList, searchHandler }) => {
     }
 
     return (
-        <div className="bg-light mb-5">
+        <div className="bg-light">
             <div className="header">
 
                 <div className="p-0 mb-3 d-flex justify-content-between">
@@ -24,7 +24,7 @@ const Header = ({ isGridView, changeView, refreshUserList, searchHandler }) => {
                         <button className="btn btn-outline-success" onClick={changeView}> <i className={viewIcon}></i> </button>
                     </div>
                 </div>
-                <input className="form-control mr-sm-2" type="search" placeholder="Search for users" aria-label="Search" onChange={searchHandler} />
+                
 
 
             </div>

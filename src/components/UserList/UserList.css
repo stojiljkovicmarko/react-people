@@ -1,3 +1,8 @@
 .card-body {
     font-size: smaller;
 }
+
+.input-field {
+    width: 80%;
+    margin: 20px auto;
+}
