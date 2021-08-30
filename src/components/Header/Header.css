@@ -9,3 +9,7 @@ button {
     width: 100px;
     height: 40px;
 }
+
+.header a {
+    text-decoration: none;
+}
