@@ -1,19 +1,22 @@
 import React from "react";
 
+import * as utils from "../../utils/helperFunctions";
+
 import "./UserCard.css";
 
 const UserCard = (props) => {
     //console.log("ovo je props svakog elem:", props.elem);
-    const { name, email, dob, picture } = props.elem;
+    const { name, email, dob, picture, gender } = props.elem;
     const { first } = name;
     const { large } = picture;
     const { date } = dob;
 
+    const red = utils.isFemale(gender) ? "red" : "";
+
     const hideEmail = (email) => {
-        let beforeMonkey = email.split("@")[0];
+        let [beforeMonkey, afterMonkey] = email.split("@");
         let firstPartBeforeMonkey = beforeMonkey.slice(0, 3) + "...";
         let secondPartBeforeMonkey = beforeMonkey.slice(beforeMonkey.length - 2, beforeMonkey.lenght);
-        let afterMonkey = email.split("@")[1];
         return (firstPartBeforeMonkey + secondPartBeforeMonkey + "@" + afterMonkey);
     }
 
@@ -43,7 +46,7 @@ const UserCard = (props) => {
     }
 
     return (
-        <div className="card bg-light col-4 pt-2 mb-2" >
+        <div className={`card ${red} col-4 pt-2 mb-2 `}>
             <img className="card-img" src={large} alt="" />
             <div className="card-body">
                 <p className="card-text">Name: {first}</p>

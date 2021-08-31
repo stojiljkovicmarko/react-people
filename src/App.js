@@ -10,12 +10,14 @@ function App() {
 
   return (
     <Fragment>
+      <Switch>
       <Route exact path="/">
         <Home />
       </Route>
       <Route exact path="/about">
         <About />
       </Route>
+      </Switch>
     </Fragment>
   );
 
