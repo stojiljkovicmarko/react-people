@@ -33,3 +33,7 @@ img {
 .user-info p {
     margin: 0;
 }
+
+.red {
+    background-color: #FFD9D9;
+}
