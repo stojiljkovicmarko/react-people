@@ -58,13 +58,12 @@ class Home extends React.Component {
         // const data = await response.json();
         // this.setState({ listOfUsers: data.results });
         
-        fetch("https://randomuser.me/api/?results=500")
-        .then(response => response.json())
+        fetch("https://randomuser.me/api/?results=15")
+          .then(response => response.json())
             .then(data => {
             this.setState({ listOfUsers: data.results });
             this.setState({ loading: false });
           });
-          
       }
     
       componentDidMount() {
