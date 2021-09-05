@@ -5,6 +5,9 @@ import { UserList } from "../components/UserList/UserList.jsx";
 import { Footer } from '../components/Footer/Footer.jsx';
 import { Spinner } from "../components/Spinner/Spinner";
 
+import { userService } from "../services/UserService.js";
+import { LocalStorageService } from "../services/LocalStorageService.js";
+
 import "./Home.css";
 
 class Home extends React.Component {
@@ -19,67 +22,60 @@ class Home extends React.Component {
 
     this.changeView = this.changeView.bind(this);
     this.fetchData = this.fetchData.bind(this);
-    //this.loadUsers = this.loadUsers.bind(this);
-    //this.loadSavedUsers = this.loadSavedUsers(this);
+    this.loadUsers = this.loadUsers.bind(this);
+    this.loadSavedUsers = this.loadSavedUsers.bind(this);
+    this.saveUsers = this.saveUsers.bind(this);
+    this.lastUpdate = this.lastUpdate.bind(this);
   }
 
   saveUsers(usersData) {
-    localStorage.setItem("latestUsers", JSON.stringify(usersData));
-    localStorage.setItem("lastUpdate", Date.now());
+    LocalStorageService.set("latestUsers", usersData);
+    LocalStorageService.set("lastUpdate", Date.now());
   }
 
-  loadSavedUsers = () => {
-    const usersData = localStorage.getItem("latestUsers");
-    return usersData ? JSON.parse(usersData) : [];
+  loadSavedUsers() {
+    const usersData = LocalStorageService.get("latestUsers");
+    return usersData ? usersData : [];
   }
 
-  // loadUsers() {
-  //   let users = this.loadSavedUsers();
+  lastUpdate() {
+    const lastUpdate = new Number(LocalStorageService.get("lastUpdate"));
+    return lastUpdate ? lastUpdate : Date.now();
+  }
 
-  //   console.log("from loadUSers, after loadsavedusers:", users);
+  loadUsers() {
+    const usersData =  LocalStorageService.get("latestUsers") || [];
+    const lastUpdate = LocalStorageService.get('lastUpdate') || Date.now();
 
-  //   if (users.length === 0) {
-  //     console.log("usli smo u if");
-  //     users = this.fetchData();
-  //   }
-
-  //   console.log("after fetching", users);
-
-  //   this.setState({
-  //     listOfUsers: users,
-  //   })
-  // }
+    if (!usersData || (usersData.length === 0)) {
+      console.log("usli u fetch");
+      this.fetchData();
+    } else {
+      this.setState({
+        listOfUsers: usersData,
+        isLoading: false,
+        lastUpdate: lastUpdate,
+      })
+    }
+  }
 
   fetchData() {
     /* const url = "https://randomuser.me/api/?results=15";
      const response = await fetch(url);
      const data = await response.json();
      this.setState({ listOfUsers: data.results }); */
-
-    const usersData = this.loadSavedUsers();
-
-    if(!usersData) {
-      console.log("usli u fetch");
-      fetch("https://randomuser.me/api/?results=15")
-      .then(response => response.json())
-      .then(data => {
-        this.saveUsers(data.results);
-        this.setState({ 
-          listOfUsers: data.results,
-          isLoading: false
-        });
-        
-      });
-    } else {
+    userService.fetchAll().then(data => {
+      this.saveUsers(data.results);
       this.setState({
-        listOfUsers: usersData,
-        isLoading: false
-      })
-    }
+        listOfUsers: data.results,
+        isLoading: false,
+        lastUpdate: Date.now()
+      });
+    });
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.loadUsers();
   }
 
   //fukcija se moze bindovati ili napisati kao arrow funstion
@@ -100,14 +96,14 @@ class Home extends React.Component {
 
   render() {
 
-    const { isGridView, listOfUsers, searchTerm, isLoading } = this.state;
-
+    const { isGridView, listOfUsers, searchTerm, isLoading, lastUpdate } = this.state;
+    console.log(listOfUsers);
     return (
       <Fragment>
         <Header changeView={this.changeView} isGridView={isGridView} refreshUserList={this.fetchData} />
         {isLoading ? <Spinner /> : <UserList listOfUsers={listOfUsers} isGridView={isGridView} searchTerm={searchTerm} searchHandler={this.searchHandler} />}
-        <Footer />
-      </Fragment>
+        <Footer lastUpdate={lastUpdate} />
+      </Fragment >
     );
   };
 

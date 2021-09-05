@@ -14,7 +14,7 @@ const UserList = ({ listOfUsers, isGridView, searchTerm, searchHandler }) => {
     return (
         <Fragment>
             <input className="form-control input-field" type="search" placeholder="Search for users" aria-label="Search" onChange={searchHandler} />
-            <div className="row user-list">
+            <div className="row user-list gap-2">
                 {/* users.result.map */}
                 {listOfUsers.filter((elem) => {
                     if (searchTerm === "") {

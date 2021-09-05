@@ -14,7 +14,7 @@ const UserCard = (props) => {
     const red = utils.isFemale(gender) ? "red" : "";
 
     return (
-        <div className={`card ${red} col-4 pt-2 mb-2 `}>
+        <div className={`card ${red} col-4 pt-2 mb-2`}>
             <img className="card-img" src={large} alt="" />
             <div className="card-body">
                 <p className="card-text">Name: {first}</p>
